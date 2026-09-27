@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pentru Gabi ❤️</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:Arial,sans-serif;background:#050005;color:white}
+.screen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;transition:opacity .8s,transform .8s}
+.hidden{opacity:0;pointer-events:none;transform:scale(1.04)}
+#intro{padding:25px;background:radial-gradient(circle,#3b0717,#16020a 50%,#050005)}
+.rotate{font-size:15px;letter-spacing:1px;text-transform:uppercase;opacity:.85;margin-bottom:25px;animation:pulse 1.8s infinite}
+h1{font-size:clamp(28px,8vw,52px);margin:0 0 14px;text-shadow:0 0 25px #ff4f86}
+.sub{font-size:17px;opacity:.8;margin-bottom:35px}
+.heart{width:110px;height:110px;border:0;background:none;cursor:pointer;position:relative;filter:drop-shadow(0 0 20px #ff2f68);animation:beat 1.15s infinite}
+.heart:before,.heart:after{content:"";position:absolute;top:25px;width:58px;height:85px;border-radius:60px 60px 0 0;background:#ff2f68}
+.heart:before{left:50px;transform:rotate(45deg);transform-origin:0 100%}
+.heart:after{left:0;transform:rotate(-45deg);transform-origin:100% 100%}
+.heart span{position:absolute;z-index:3;inset:0;display:flex;align-items:center;justify-content:center;font-size:34px}
+#videoScreen{background:#000}
+video{width:100%;height:100%;object-fit:contain;background:#000}
+#end{background:radial-gradient(circle,#5d0a27,#120108 65%,#000)}
+.love{font-size:clamp(38px,10vw,75px);font-weight:bold;text-shadow:0 0 15px #ff477d,0 0 45px #ff477d;animation:appear 1.8s ease forwards}
+.hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.float{position:absolute;bottom:-50px;animation:float 5s linear forwards;opacity:0}
+@keyframes beat{50%{transform:scale(1.13)}}
+@keyframes pulse{50%{opacity:.45}}
+@keyframes appear{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+@keyframes float{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.9}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}
+@media (orientation:landscape){.rotate{display:none}}
+</style>
+</head>
+<body>
+
+<div id="intro" class="screen">
+  <div class="rotate">↻ Întoarce telefonul pentru a vedea ceva special</div>
+  <h1>Am ceva pentru tine ❤️</h1>
+  <div class="sub">Când ești gata, apasă pe inimă...</div>
+  <button class="heart" id="start" aria-label="Pornește surpriza"><span>❤️</span></button>
+  <div class="hearts" id="introHearts"></div>
+</div>
+
+<div id="videoScreen" class="screen hidden">
+  <video id="video" playsinline preload="auto" controls>
+    <source src="gabi_video_github.mp4" type="video/mp4">
+    Browserul tău nu poate reda acest video.
+  </video>
+</div>
+
+<div id="end" class="screen hidden">
+  <div class="hearts" id="endHearts"></div>
+  <div class="love">Te iubesc Gabi ❤️</div>
+</div>
+
+<script>
+const intro=document.getElementById('intro');
+const videoScreen=document.getElementById('videoScreen');
+const end=document.getElementById('end');
+const video=document.getElementById('video');
+
+function hide(x){x.classList.add('hidden')}
+function show(x){x.classList.remove('hidden')}
+
+function hearts(container,count){
+  for(let i=0;i<count;i++){
+    const h=document.createElement('div');
+    h.className='float';
+    h.textContent=['❤️','💕','💖','💗','✨'][Math.floor(Math.random()*5)];
+    h.style.left=Math.random()*100+'%';
+    h.style.animationDelay=Math.random()*3+'s';
+    h.style.fontSize=(16+Math.random()*28)+'px';
+    container.appendChild(h);
+  }
+}
+hearts(document.getElementById('introHearts'),20);
+
+document.getElementById('start').addEventListener('click', async function(){
+  // Click-ul utilizatorului permite pornirea cu sunet pe iPhone/Safari.
+  hide(intro);
+  show(videoScreen);
+  video.muted=false;
+  video.volume=1;
+  video.currentTime=0;
+
+  try {
+    await video.play();
+  } catch(error) {
+    // Dacă browserul nu pornește automat, controalele sunt deja vizibile.
+    video.controls=true;
+  }
+});
+
+video.addEventListener('ended', function(){
+  hide(videoScreen);
+  show(end);
+  hearts(document.getElementById('endHearts'),55);
+});
+</script>
+</body>
+</html>
